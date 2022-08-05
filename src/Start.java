@@ -1,85 +1,95 @@
-import java.util.Objects;
+import models.Boss;
+import models.Hero;
+
 import java.util.Scanner;
-import java.lang.Math;
 
 public class Start {
     public static void main(String[] args) {
 
         Scanner s = new Scanner(System.in);
 
-
         System.out.print("Введите число: ");
         int n = Integer.parseInt(s.nextLine());
         String[][] pole = new String[n][n];
 
-        for (int i = 0; i <n; i++) {
-            for (int j = 0; j < n;j++ ) {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
                 pole[i][j] = "0  ";
             }
         }
-        int x = 0;
-        int y = 0;
-        int a;
-        int b;
         int bossX;
         int bossY;
-
-        if (n%2==0) {
-
-            bossX = (n /2)-(int) (Math.random()*2);
-            bossY = (n /2)-(int) (Math.random()*2);
+        if (n % 2 == 0) {
+            bossX = (n / 2) - (int) (Math.random() * 2);
+            bossY = (n / 2) - (int) (Math.random() * 2);
         } else {
-            bossX = n /2;
-            bossY = n/2;
+            bossX = n / 2;
+            bossY = n / 2;
         }
+
+        Hero hero = new Hero(0, 0, "X  ", 20);
+        Boss boss = new Boss(bossX, bossY, "Y  ", 15);
+
+        int lastHeroY;
+        int lastHeroX;
+        int lastBossY;
+        int lastBossX;
+        Start m = new Start();
 
         label:
         while (true) {
-            pole[y][x] = "X  ";
-            pole[bossY][bossX] = "Y  ";
-            Start m = new Start();
+
+            pole[hero.getY()][hero.getX()] = "X  ";
+            pole[boss.getY()][boss.getX()] = "Y  ";
+
             m.printMap(pole);
             System.out.print("Введите букву: ");
             String move = s.nextLine();
+
+            lastHeroY = hero.getY();
+            lastHeroX = hero.getX();
+            lastBossX = boss.getX();
+            lastBossY = boss.getY();
+
             switch (move) {
                 case "w":
-                    if (y != 0) {
-                        a = y;
-                        b = x;
-                        pole[a][b] = "0  ";
-                        y--;
+                    if (hero.getY() != 0) {
+                        pole[lastHeroY][lastHeroX] = "0  ";
+                        pole[lastBossY][lastBossX] = "0  ";
+                        hero.setY(hero.getY() - 1);
+                        m.moveBoss(boss, n);
                     } else {
                         System.out.println("пошел нафиг!");
                     }
 
                     break;
                 case "d":
-                    if (x != n - 1) {
-                        b=x;
-                        a = y;
-                        pole[a][b] = "0  ";
-                        x++;
+                    if (hero.getX() != n - 1) {
 
+                        pole[lastHeroY][lastHeroX] = "0  ";
+                        pole[lastBossY][lastBossX] = "0  ";
+                        hero.setX(hero.getX() + 1);
+                        m.moveBoss(boss, n);
                     } else {
                         System.out.println("пошел нафиг!");
                     }
                     break;
                 case "s":
-                    if (y != n - 1) {
-                        a = y;
-                        b = x;
-                        pole[a][b] = "0  ";
-                        y++;
+                    if (hero.getY() != n - 1) {
+                        pole[lastBossY][lastBossX] = "0  ";
+                        pole[lastHeroY][lastHeroX] = "0  ";
+                        hero.setY(hero.getY() + 1);
+                        m.moveBoss(boss, n);
                     } else {
                         System.out.println("пошел нафиг!");
                     }
                     break;
                 case "a":
-                    if (x != 0) {
-                        b = x;
-                        a = y;
-                        pole[a][b] = "0  ";
-                        x--;
+                    if (hero.getX() != 0) {
+                        pole[lastBossY][lastBossX] = "0  ";
+                        pole[lastHeroY][lastHeroX] = "0  ";
+                        hero.setX(hero.getX() - 1);
+                        m.moveBoss(boss, n);
                     } else {
                         System.out.println("пошел нафиг!");
                     }
@@ -92,15 +102,15 @@ public class Start {
                     System.out.println("пошел нафиг!");
                     break;
             }
-            if (Objects.equals(pole[y][x], pole[bossY][bossX])) {
-                pole[y][x] = "X  ";
+
+            if (hero.getX() == boss.getX() && hero.getY() == boss.getY()) {
                 System.out.println("Победа!");
                 break;
             }
         }
     }
 
-    public void printMap(String[][] pole){
+    public void printMap(String[][] pole) {
 
         for (String[] strings : pole) {
 
@@ -111,5 +121,21 @@ public class Start {
         }
 
     }
+
+    public void moveBoss(Boss boss, int n) {
+        boolean isMoved = false;
+        while (!isMoved) {
+            int x = boss.getX() + (int) ((Math.random() * 4) - 2);
+            int y = boss.getY() + (int) ((Math.random() * 4) - 2);
+            if (y < n && y > 0 && x < n && x > 0) {
+                isMoved = true;
+                boss.setX(x);
+                boss.setY(y);
+            }
+        }
+
+
+    }
+
 
 }
