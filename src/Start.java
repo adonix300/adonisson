@@ -18,8 +18,8 @@ public class Start {
         }
         int x = 0;
         int y = 0;
-        int a;
-        int b;
+        int a = 0;
+        int b = 0;
         int bossX = n - 1;
         int bossY = n - 1;
         label:
