@@ -1,4 +1,5 @@
 import models.Boss;
+import models.GameMap;
 import models.Hero;
 
 import java.util.Scanner;
@@ -9,16 +10,15 @@ public class Start {
         Scanner s = new Scanner(System.in);
 
         System.out.print("Введите число: ");
-        int n = Integer.parseInt(s.nextLine());
-        String[][] pole = new String[n][n];
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                pole[i][j] = "0  ";
-            }
-        }
+        int n = Integer.parseInt(s.nextLine());
         int bossX;
         int bossY;
+        int lastHeroY;
+        int lastHeroX;
+        int lastBossY;
+        int lastBossX;
+
         if (n % 2 == 0) {
             bossX = (n / 2) - (int) (Math.random() * 2);
             bossY = (n / 2) - (int) (Math.random() * 2);
@@ -27,22 +27,17 @@ public class Start {
             bossY = n / 2;
         }
 
-        Hero hero = new Hero(0, 0, "X  ", 20);
-        Boss boss = new Boss(bossX, bossY, "Y  ", 15);
-
-        int lastHeroY;
-        int lastHeroX;
-        int lastBossY;
-        int lastBossX;
-        Start m = new Start();
-
+        GameMap gameMap = new GameMap(n);
+        Hero hero = new Hero(0, 0, "\u001B[32m" + "|X_" + "\u001B[0m", 20);
+        Boss boss = new Boss(bossX, bossY, "\u001B[31m" + "|Y_" + "\u001B[0m", 15);
+        String defaultCell = "|__";
         label:
         while (true) {
 
-            pole[hero.getY()][hero.getX()] = "X  ";
-            pole[boss.getY()][boss.getX()] = "Y  ";
+            gameMap.setValue(hero.getY(), hero.getX(), hero.getIcon());
+            gameMap.setValue(boss.getY(), boss.getX(), boss.getIcon());
 
-            m.printMap(pole);
+            gameMap.printMap();
             System.out.print("Введите букву: ");
             String move = s.nextLine();
 
@@ -54,10 +49,10 @@ public class Start {
             switch (move) {
                 case "w":
                     if (hero.getY() != 0) {
-                        pole[lastHeroY][lastHeroX] = "0  ";
-                        pole[lastBossY][lastBossX] = "0  ";
+                        gameMap.setValue(lastHeroY, lastHeroX, defaultCell);
+                        gameMap.setValue(lastBossY, lastBossX, defaultCell);
                         hero.setY(hero.getY() - 1);
-                        m.moveBoss(boss, n);
+                        boss.moveBoss(n);
                     } else {
                         System.out.println("пошел нафиг!");
                     }
@@ -65,31 +60,30 @@ public class Start {
                     break;
                 case "d":
                     if (hero.getX() != n - 1) {
-
-                        pole[lastHeroY][lastHeroX] = "0  ";
-                        pole[lastBossY][lastBossX] = "0  ";
+                        gameMap.setValue(lastHeroY, lastHeroX, defaultCell);
+                        gameMap.setValue(lastBossY, lastBossX, defaultCell);
                         hero.setX(hero.getX() + 1);
-                        m.moveBoss(boss, n);
+                        boss.moveBoss(n);
                     } else {
                         System.out.println("пошел нафиг!");
                     }
                     break;
                 case "s":
                     if (hero.getY() != n - 1) {
-                        pole[lastBossY][lastBossX] = "0  ";
-                        pole[lastHeroY][lastHeroX] = "0  ";
+                        gameMap.setValue(lastHeroY, lastHeroX, defaultCell);
+                        gameMap.setValue(lastBossY, lastBossX, defaultCell);
                         hero.setY(hero.getY() + 1);
-                        m.moveBoss(boss, n);
+                        boss.moveBoss(n);
                     } else {
                         System.out.println("пошел нафиг!");
                     }
                     break;
                 case "a":
                     if (hero.getX() != 0) {
-                        pole[lastBossY][lastBossX] = "0  ";
-                        pole[lastHeroY][lastHeroX] = "0  ";
+                        gameMap.setValue(lastHeroY, lastHeroX, defaultCell);
+                        gameMap.setValue(lastBossY, lastBossX, defaultCell);
                         hero.setX(hero.getX() - 1);
-                        m.moveBoss(boss, n);
+                        boss.moveBoss(n);
                     } else {
                         System.out.println("пошел нафиг!");
                     }
@@ -109,33 +103,4 @@ public class Start {
             }
         }
     }
-
-    public void printMap(String[][] pole) {
-
-        for (String[] strings : pole) {
-
-            for (int j = 0; j < pole.length; j++) {
-                System.out.print(strings[j]);
-            }
-            System.out.println();
-        }
-
-    }
-
-    public void moveBoss(Boss boss, int n) {
-        boolean isMoved = false;
-        while (!isMoved) {
-            int x = boss.getX() + (int) ((Math.random() * 4) - 2);
-            int y = boss.getY() + (int) ((Math.random() * 4) - 2);
-            if (y < n && y > 0 && x < n && x > 0) {
-                isMoved = true;
-                boss.setX(x);
-                boss.setY(y);
-            }
-        }
-
-
-    }
-
-
 }

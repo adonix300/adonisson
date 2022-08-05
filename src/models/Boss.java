@@ -15,4 +15,17 @@ public class Boss extends BaseMapObject {
     public int getHealth(){
         return health;
     }
+
+    public void moveBoss(int n) {
+        boolean isMoved = false;
+        while (!isMoved) {
+            int x = getX() + (int) ((Math.random() * 4) - 2);
+            int y = getY() + (int) ((Math.random() * 4) - 2);
+            if (y < n && y > 0 && x < n && x > 0) {
+                isMoved = true;
+                setX(x);
+                setY(y);
+            }
+        }
+    }
 }
