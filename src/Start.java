@@ -1,3 +1,4 @@
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Start {
@@ -17,10 +18,14 @@ public class Start {
         }
         int x = 0;
         int y = 0;
-
+        int a;
+        int b;
+        int bossX = n - 1;
+        int bossY = n - 1;
         label:
         while (true) {
             pole[y][x] = "X  ";
+            pole[bossY][bossX] = "Y  ";
             Start m = new Start();
             m.printMap(pole);
             System.out.print("Введите букву: ");
@@ -28,6 +33,9 @@ public class Start {
             switch (move) {
                 case "w":
                     if (y != 0) {
+                        a = y;
+                        b = x;
+                        pole[a][b] = "0  ";
                         y--;
                     } else {
                         System.out.println("пошел нафиг!");
@@ -36,13 +44,20 @@ public class Start {
                     break;
                 case "d":
                     if (x != n - 1) {
+                        b=x;
+                        a = y;
+                        pole[a][b] = "0  ";
                         x++;
+
                     } else {
                         System.out.println("пошел нафиг!");
                     }
                     break;
                 case "s":
                     if (y != n - 1) {
+                        a = y;
+                        b = x;
+                        pole[a][b] = "0  ";
                         y++;
                     } else {
                         System.out.println("пошел нафиг!");
@@ -50,6 +65,9 @@ public class Start {
                     break;
                 case "a":
                     if (x != 0) {
+                        b = x;
+                        a = y;
+                        pole[a][b] = "0  ";
                         x--;
                     } else {
                         System.out.println("пошел нафиг!");
@@ -62,6 +80,11 @@ public class Start {
                 default:
                     System.out.println("пошел нафиг!");
                     break;
+            }
+            if (Objects.equals(pole[y][x], pole[bossY][bossX])) {
+                pole[y][x] = "X  ";
+                System.out.println("Победа!");
+                break;
             }
         }
     }
