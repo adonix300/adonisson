@@ -1,5 +1,6 @@
 import java.util.Objects;
 import java.util.Scanner;
+import java.lang.Math;
 
 public class Start {
     public static void main(String[] args) {
@@ -18,10 +19,20 @@ public class Start {
         }
         int x = 0;
         int y = 0;
-        int a = 0;
-        int b = 0;
-        int bossX = n - 1;
-        int bossY = n - 1;
+        int a;
+        int b;
+        int bossX;
+        int bossY;
+
+        if (n%2==0) {
+
+            bossX = (n /2)-(int) (Math.random()*2);
+            bossY = (n /2)-(int) (Math.random()*2);
+        } else {
+            bossX = n /2;
+            bossY = n/2;
+        }
+
         label:
         while (true) {
             pole[y][x] = "X  ";
