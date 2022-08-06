@@ -98,9 +98,23 @@ public class Start {
             }
 
             if (hero.getX() == boss.getX() && hero.getY() == boss.getY()) {
+//                System.out.println("Победа!");
+//                break;
+                boss.setHealth(boss.getHealth() - (int) (Math.random() * 5));
+                hero.setHealth(hero.getHealth() - (int) (Math.random() * 6));
+                System.out.println("Жизни босса: " + boss.getHealth());
+                System.out.println("Жизни героя: " + hero.getHealth());
+            }
+
+            if (boss.getHealth() <=0) {
                 System.out.println("Победа!");
                 break;
+            } else if (hero.getHealth() <= 0) {
+                System.out.println("Поражение!");
+                break;
             }
+
+
         }
     }
 }
